@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Official Civic Portal for reporting local issues. A Government of India initiative.">
+<title>Civic Portal | Government of India</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">Skip to Main Content</a>
+
+<header>
+    <div class="logo-container">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI4MiIgdmlld0JveD0iMCAwIDUwIDgyIj48ZyBmaWxsPSIjMGQ0N2ExIj48cGF0aCBkPSJNMjUgMGMtNSAwLTkgMy0xMSA3LTQgNS0yIDgtMiAxMCAyIDMgNSA2IDExIDYgNiAwIDktMyAxMS02IDItMiAyLTUgMC0xMC0yLTQtNi03LTExLTd6bTAgMmM0IDAgNyAzIDkgNnMyIDYgMCA4LTMgNS05IDVzLTctMi05LTVjMC0yLTMtNi0xLThzNS02IDktNnoiLz48cGF0aCBkPSJNMwozNGMxLTIgMy0zIDUtMyAyIDAgMyAxIDQgMmwxIDRjMCAxLTEgNC0xIDYtMSAwLTEtMS0yLTItMSAwLTIgMC0yIDItMiAzLTUgNC03IDQtMyAwLTUtMi01LTUgMC0zIDItNSA0LTZ6bTQ0IDBjMS0yIDMtMyA1LTMgMiAwIDMgMSA0IDJsMSA0YzAgMS0xIDQtMSA2LTEgMC0xLTEtMi0yLTEgMC0yIDAtMiAyLTIgMy01IDQtNyA0LTMgMC01LTIsLTUtNSAwLTMgMi01IDQtNnoiLz48cGF0aCBkPSJNMjUgMzNjLTQgMC03IDMtNyA2IDAgMSAwIDMgMiA2IDEgMiAyIDMgMiA2IDAgMiAwIDMtMSA0IDAgMSAwIDEgNSAyMSA1IDMgOSAzIDgtMyA0LTUtNC04IDAtMiAwLTMtMS00IDAtMy0xLTQtMi02LTItMy01LTctNy02em0wIDJjMyAwIDUgMiA1IDRjMCAxLTEtMi0xLTQtMS0xLTEtMS0yLTItMS0xLTEtMS0yLTItNS0xIDEgMCAyIDIgMiAwIDAtMSAwLTIgMS0xIDEgMCAyIDEtMnptMjUgNTljLTYgMC05IDItOSA2IDAgMyAyIDYgOSA2IDYgMCA5LTMgOS02IDAtNC0zLTYtOS02em0wIDJjNCAwIDcgMiA3IDQgMCAyLTEgNC03IDQtNiAwLTctMi03LTQgMC0yIDMtNCA3LTR6Ii8+PHBhdGggZD0iTTExIDc0YzAtMSAwLTEtMS0yLTMtNi0zLTEwIDAtMTMgMy0zIDctMyAxMSAwIDQtMyA4LTYgMTMtMyA0IDAgOCAyIDExIDMgMyAzIDYgNyA2IDEwLTQtMy04LTUtMTMtNWgtMWMtNSAwLTktMi0xMyA1eiIvPjxwYXRoIGQ9Ik0yNSA3OGMxIDAgMSAwIDIgMCAwIDAgMSAwIDEtMSAyLTIgMS00IDEtNSAwLTEtMS0yIDAtMi0yLTEtMS0xLTItMi0yeiIvPjwvZz48L3N2Zz4=" alt="Emblem of India" class="emblem" />
+        <div class="title-container">
+            <h1><span data-lang="portalTitle">Civic Portal</span></h1>
+            <p>Government of India</p>
+        </div>
+    </div>
+
+    <div class="header-right-controls">
+        <button class="theme-toggle-btn" onclick="toggleTheme()">
+            <span class="moon-icon">🌙</span>
+            <span class="sun-icon">☀️</span>
+        </button>
+        <div style="max-width: 150px;">
+            <select id="languageSelector" onchange="setLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="mr">मराठी</option>
+                <option value="or">ଓଡ଼ିଆ</option>
+                <option value="bn">বাংলা</option>
+                <option value="ta">தமிழ்</option>
+            </select>
+        </div>
+        <img src="https://www.nicepng.com/png/detail/933-9333810_ashok-stambh-logo-hd.png" alt="Ashoka Stambha" class="header-ashoka-emblem" />
+    </div>
+</header>
+
+<main id="main-content">
+    <div id="page0" class="card">
+        <h2 data-lang="roleQuestion"> Who are you?</h2>
+        <p class="small" data-lang="roleInstruction">Choose role to continue</p>
+        <div style="display:flex;gap:12px;margin-top:16px">
+            <button class="btn" onclick="gotoPage('userLogin')" data-lang="userButton">I am a User</button>
+            <button class="btn" onclick="gotoPage('adminLogin')" data-lang="adminButton">I am an Admin</button>
+        </div>
+    </div>
+
+    <div id="userLogin" class="card hidden">
+        <h2 data-lang="userLoginTitle"> Sign in with Google</h2>
+        <div id="g_id_onload"
+        data-client_id="206870259193-04tn3lhqmn4sf61cmp7l0pmgntafclnf.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse">
+        </div>
+        <div class="g_id_signin" data-type="standard"></div>
+        <p class="small" data-lang="userLoginInstruction">After signing in you'll be taken to the user portal</p>
+        <p class="small"><a href="#" onclick="gotoPage('page0')" data-lang="backButton">← Back</a></p>
+    </div>
+
+    <div id="adminLogin" class="card hidden">
+        <h2 data-lang="adminLoginTitle"> Admin Login</h2>
+        <input id="adminId" placeholder="Admin ID " data-lang-placeholder="adminIdPlaceholder">
+        <div class="password-container">
+          <input id="adminPass" placeholder="Password " type="password" data-lang-placeholder="adminPassPlaceholder">
+          <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility()">👁</button>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn" onclick="adminLogin()" data-lang="loginButton">Login</button>
+        <button class="btn" onclick="gotoPage('page0')" style="background-color:#6c757d;" data-lang="cancelButton">Cancel</button>
+        </div>
+        <p id="adminError" class="error hidden" data-lang="adminLoginError"> Incorrect ID or Password</p>
+    </div>
+
+    <div id="page3" class="card hidden">
+        <h2 data-lang="reportIssueTitle"> Report an Issue</h2>
+        <textarea id="issueDesc" placeholder="Describe the issue..." rows="3" data-lang-placeholder="issueDescPlaceholder"></textarea>
+        <select id="issueCat">
+        <option value="" data-lang="selectCategoryPlaceholder">Select category</option>
+        <option data-lang="catElectricity">Electricity</option>
+        <option data-lang="catWater">Water</option>
+        <option data-lang="catStreetlight">Streetlight</option>
+        <option data-lang="catRoad">Road</option>
+        <option data-lang="catSanitation">Sanitation</option>
+        </select>
+
+        <div style="margin-top:12px">
+        <label class="small" data-lang="locationLabel"> Problem location</label>
+        <input id="locationTxt" placeholder="Enter location manually" data-lang-placeholder="locationPlaceholder">
+        </div>
+        <div style="margin-top:12px">
+            <label class="small" data-lang="locationLabel"> Problem location</label>
+            <input id="locationTxt" placeholder="Enter location manually" data-lang-placeholder="locationPlaceholder">
+            <div id="map-picker" class="map-container"></div>
+        </div>
+
+        <div style="margin-top:12px">
+        <label class="small" data-lang="imageLabel"> Image (upload or capture)</label>
+        <div class="upload-row">
+        <input id="imgUpload" type="file" accept="image/*" capture="environment">
+        <button class="btn" id="startCamBtn" type="button" data-lang="startCamBtn">Start Camera</button>
+        <button class="btn btn-danger hidden" id="removeImgBtn" type="button" data-lang="removeImageBtn">Remove Image</button>
+        </div>
+        <video id="imgVideo" class="hidden preview" autoplay playsinline style="max-height:300px"></video>
+        <div class="controls hidden" id="imgCamControls">
+        <button class="btn" id="takePhotoBtn" type="button" data-lang="takePhotoBtn">Take Photo</button>
+        <button class="btn" id="stopCamBtn" type="button" data-lang="stopCamBtn">Stop Camera</button>
+        </div>
+        <canvas id="imgCanvas" class="hidden"></canvas>
+        <img id="imgPreview" class="hidden preview" alt="image preview">
+        </div>
+
+        <div style="margin-top:14px">
+        <label class="small" data-lang="videoLabel"> Video (upload or record)</label>
+        <div class="upload-row">
+        <input id="vidUpload" type="file" accept="video/*" capture="camcorder">
+        <button class="btn" id="startVidRec" type="button" data-lang="startVidRec">Start Recording</button>
+        <button class="btn hidden" id="stopVidRec" type="button" data-lang="stopVidRec">Stop Recording</button>
+        <button class="btn btn-danger hidden" id="removeVidBtn" type="button" data-lang="removeVidBtn">Remove Video</button>
+        </div>
+        <video id="vidPreview" class="hidden preview" controls style="max-height:300px"></video>
+        </div>
+
+        <div style="margin-top:14px">
+        <label class="small" data-lang="audioLabel"> Audio (upload or record)</label>
+        <div class="upload-row">
+        <input id="audUpload" type="file" accept="audio/*" capture="microphone">
+        <button class="btn" id="startAudRec" type="button" data-lang="startAudRec">Start Recording</button>
+        <button class="btn hidden" id="stopAudRec" type="button" data-lang="stopAudRec">Stop Recording</button>
+        <button class="btn btn-danger hidden" id="removeAudBtn" type="button" data-lang="removeAudBtn">Remove Audio</button>
+        </div>
+        <audio id="audPreview" class="hidden preview" controls></audio>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:16px">
+        <button class="btn" onclick="submitReport()" data-lang="submitReportBtn">Submit Report</button>
+        <button class="btn" onclick="logoutUser()" style="background-color:#6c757d;" data-lang="logoutBtn">Logout</button>
+        </div>
+        <div id="submitMsg" class="success hidden" data-lang="reportSuccessMsg"> Report submitted successfully!</div>
+        <h3 style="margin-top:24px; border-top: 1px solid #e9ecef; padding-top: 16px;" data-lang="myReportsTitle"> My Reports</h3>
+        <div id="userReports" class="reports-list"></div>
+    </div>
+
+    <div id="page4" class="card hidden">
+        <h2 data-lang="adminDashboardTitle"> Admin Dashboard</h2>
+        <div style="position:relative; margin-bottom: 10px;">
+            <button class="btn" onclick="toggleSortDialog()" style="width:auto; margin-top:0;" data-lang="sortBtn">Sort Reports</button>
+            <div id="sortDialog" class="sort-dialog">
+                <label for="sortBy" data-lang="sortByLabel">Sort By:</label>
+                <select id="sortBy" onchange="sortReports()">
+                    <option value="created_at" data-lang="sortByDate">Date (Newest First)</option>
+                    <option value="status" data-lang="sortByStatus">Status</option>
+                    <option value="cat" data-lang="sortByCategory">Category</option>
+                </select>
+                <label for="sortOrder" data-lang="sortOrderLabel">Order:</label>
+                <select id="sortOrder" onchange="sortReports()">
+                    <option value="desc" data-lang="sortDesc">Descending</option>
+                    <option value="asc" data-lang="sortAsc">Ascending</option>
+                </select>
+            </div>
+        </div>
+        <div id="allReports" class="reports-list"></div>
+        <h3 style="margin-top:24px; border-top: 1px solid #e9ecef; padding-top: 16px;" data-lang="analyticsTitle"> Analytics</h3>
+        <canvas id="statusChart" style="margin-top:8px"></canvas>
+        <div style="margin-top:12px">
+        <button class="btn" onclick="gotoPage('page0')" style="background-color:#6c757d;" data-lang="backToRoleBtn">Back to Role Select</button>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Website Policies</a></li>
+                <li><a href="#">Help</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul>
+                <li><a href="https://india.gov.in" target="_blank" rel="noopener noreferrer">National Portal of India</a></li>
+                <li><a href="https://www.mygov.in" target="_blank" rel="noopener noreferrer">MyGov</a></li>
+                <li><a href="https://pgportal.gov.in" target="_blank" rel="noopener noreferrer">CPGRAMS</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Contact Info</h3>
+            <p>Office of Civic Affairs<br>Patna, Bihar, India<br>Email: contact@civicportal.gov.in</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>This website is designed, developed and maintained by National Informatics Centre (NIC).</p>
+        <div class="footer-logos">
+            <a href="https://www.digitalindia.gov.in" target="_blank" rel="noopener noreferrer"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMzguMyA5My40Ij48cGF0aCBmaWxsPSIjRjY4QjFGIiBkPSJNMCAwaDMzOC4z insensibleIMzguM3oiLz48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMzguMSA3My40aDQuN3Y5LjZoLTQuN3ptNiA5LjloLjctLjVjMC0xLS4zLTItLjYtMi41LS40LS41LTEtLjctMi0uNy0uNyAwLTEuMy4zLTItLjgxLTEgMC0uNiAxLjQtLjYgMi40djEwLjNoLTQuN3YtMjUuMWg0LjR2MS4zYzEtMS4xIDEuNC0xLjYgMi43LTEuNiAxLjYgMCAyLjguNiAzLjcgMi4xIDEgMS4zIDEuNiAzIDEuNiA1LjR2OS42em05LjEtOS45bC0xMi45IDguNyA2LjUtOS45aDQuOGwtNS4yIDguNiA1LjUgMTEuNGgtNS4xbC0zLjQtNy45LTMuNiA3LjloLTUuMWw3LjEtMTIuOHpNMzYuOSA5My40aDQuN3YtNDAuMmg0Lj and an animated image of a man using a digital device to fill out a form with a chat bubble icon floating beside it.7vMjMuNCAzMC4zaC03LjlsLTE2LjktMjUuMyAyNC45LTI3LjdoLTQuN3Y0MC4yaC00Ljd2LTMwLjJoLTIzLjQtMzAuM2g3LjlsMTYuOSAyNS4zLTI0LjkgMjcuN3ptNDIgMS44aDUuM2w1LjgtMTEuNSA1LjggMTEuNWg1LjNsLTguMy0xNS4xIDguNC0xNS45aC01LjNsLTUuNiAxMC41LTUuNy0xMC41aC01LjNsOC4yIDE1LjktOC4zIDE1LjF6bTI3LjctNi4yYzAtMS0uMy0yLjItLjgtMy0uNS0xLTEuMy0xLjgtMi41LTIuNy0xLjEtMS0yLjItMS4xLTMuNS0xLjEtMS40IDAtMi42LjQtMy41IDEuMS0xLjEtMS0xLjgtMi41LTIuNy0xLjYtMS0uOC0xLjEtMi4yLTEuMS0zLjRzLjMtMi4yLjgxLTMuNGMuNS0xIDEuMy0xLjggMi41LTIuNyAxLjEtMSAyLjItMS4xIDMuNS0xLjEgMS40IDAgMi42LjQgMy41IDEuMSAxIC44IDEuNyAyLjEgMS43IDMuNnptLTQuMy0uMmMwLTIuMy0uMi0zLjktLjctNC44LS41LS45LTEuMi0xLjYtMi0xLjYtLjggMC0xLjUuNy0yIDEuNi0uNS45LS43IDIuNS0uNyA0LjggMCAyLjMuMiAzLjkuNyA0LjhzMS4yIDEuNiAyIDEuNmMuOCAwIDEuNS0uNyAyLTEuNi41LS45LjctMi41LjctNC44em0xNi45IDYuMnYtMjUuMWg0Lj and an animated image of a man using a digital device to fill out a form with a chat bubble icon floating beside it.7vMjUuMWgtNC43em03LjItNS4zdjguOGg0LjR2LTI1LjFoLTQuNFY3NmgtNC44bC04LTEzLjZ2LTEyLjloNC43djEzaDQuNnoiLz48L3N2Zz4=" alt="Digital India Logo"></a>
+            <a href="https://www.nic.in" target="_blank" rel="noopener noreferrer"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMTguMSAzMi45Ij48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTIwLjMgMzAuNGg5LjZWMTAuM2gtOS42djIwLjF6TTM2LjUgMjQuOWMwIDUuMi00IDkuMy04LjcgOS4zLTQuOSAwLTguNy00LjEtOC43LTkuM1Y2LjljMC01LjIgNC05LjMgOC43LTkuMyA0LjkgMCA4LjcgNC4xIDguNyA5LjN2MTh6bS0yNi42IDUuNWg5LjZWMTAuM2gtOS42djIwLjF6TTk4LjggMTguMWwtMS43LTQuOGMtLjEtLjMtLjEtLjUtLjEtLjdoLS4xYzAtLjEtLjEtLjMtLjEtLjVsLTYuOC0xNy4IMzcuNFYxMGg5LjZWMi41aDEwLjF2Ny41aDkuNnYyMC4xaC05LjZ2LTguM2gtMTAuMXY4LjNoLTkuNnYtMjAuMWg5LjZ2Ny41aDEwLjFWMi41aDQuNVYxMGg5LjZWMi41aDkuN3Y3LjVoOS42VjMwLjRoLTkuNnYtNy41aC05LjZWMzAuNEgzNi41VjEwLjNoOS42VjIuNWgxMC4xdjcuNWg5LjZ2MjAuMWgtOS42di03LjVoLTEwLjF2Ny41aC05LjZ2LTIwLjFoOS42djguM2gxMC4xVjIuNWg5LjZWMTAuMGg5LjZWMzAuNGgtOS42di03LjVoLTEwLjF2Ny41aC05LjZWMTAuM2g5LjZWMi41aDkuOHY3LjVoOS42djIwLjFoLTkuNnYtNy41aC05LjdhbC4zLTEuMnYxLjJjLTQuNiAxLjItOC43IDMtMTAuNSAzLjdsLS42LjYtLjEuMWgzLjVjLS42LTEuNC0yLjktNy43LTQuNS0xMC44LS4xLS4xLS4xLS4xLS4xLS4yLS4yLS4zLS41LS43LS45LTEuMi0uMS0uMS0uMS0uMi0uMi0uMy0uNy0xLTMtMy42LTQtNS4zLS4xLS4yLS4yLS40LS40LS42LS42LS44LTEtMS42LTEuNS0yLjUtLjEtLjItLjItLjUtLjMtLjgtLjItLjQtLjQtLjctLjYtMS4xLS4zLS42LS40LTEuMS0uNy0xLjYtLjEtLjQtLjMtLjctLjMtMS4xIDAtLjUtLjItMS0uNC0xLjUtLjEtLjMtLjItLjYtLjMtLjktLjItLjQtLjQtLjYtLjYtMS0uMi0uNS0uNC0uOC0uNi0xLjMtLjEtLjItLjEtLjQtLjItLjctLjEtLjMtLjItLjUtLjMtLjgxLTEuNS02LjktMS45LTkuNi01LTExLjUgMi4yLTQgMy42LTYuNiA1LjItOC41IDYuMi0xLjcgOS4yLTIuNSA5LjgtMy0uMS0uMS0uMy0uMi0uNS0uMy0uNC0uMy0uOC0uNi0xLjItMS0uMS0uMS0uMi0uMy0uMy0uNC0uNS0uNi0uOC0xLjItMS4zLTEuOS0uMS0uMy0uMy0uNS0uMy0uOC0uMS0uNC0uMS0uNi0uMi0uOC0uMy0uNy0uNC0xLjQtLjYtMi4xLS4xLS4zLS4yLS41LS4zLS44LS40LTEtLjctMS44LS45LTIuNi0uMy0uOS0uMy0xLjktLjMtMy0uMS0uMi0uMS0uNC0uMS0uNSAwLS4zIDAtLjYtLjItLjguNC0uMy45LS41IDEuNS0uN1M5Ny45IDE4LjEgOTguOCAxOC4xem0yLTMuMmMtMi44LS42LTYuOC0yLjItMTAuNy00LjYtLjEtLjEtLjItLjItLjMtLjMtLjUtLjQtLjgtLjgtMS4zLTEuMy0uMi0uMi0uMy0uMy0uNC0uNS0uNS0uNi0uOC0xLjItMS4yLTEuOS0uMi0uMy0uMy0uNi0uNC0uOC0uNC0xLS43LTEuOC0uOC0yLjctLjEtLjYtLjItMS4yLS4zLTEuOC0uMS0uNC0uMS0uNy0uMi0xLS40LTEuMS0uOC0yLjQtMS4xLTMuNi0uMS0uNS0uMi0x-.Mi0xLjUtLjQtMS41LS42LTIuNi0uOS0zLjgtLjItMS4xLS4zLTEuNy0uNS0yLjQtLjEtLjQtLjItLjktLjMtMS4yLS4xLS42LS4xLTEuMS0uMi0xLjYtLjItLjktLjMtMS42LS41LTIuNC0uMS0uNS0uMy0uOS0uMy0xLjQtLjItLjYtLjQtMS40LS41LTEuOS0uMy0xLjQtLjYtMi44LS44LTMuOS0uMi0xLS4zLTEuNy0uNC0yLjEtLjEtLjQtLjEtLjYtLjEtLjctLjYtMi44LTEtNC4yLTEuMS01LjUtLjEtMS4xLS4xLTIuMS0uMS0zLjIgMC0uMSAwLS4yIDAtLjMuMi0xLjYuNS0zLjUgMS4xLTVoMS43YzEuNS0uNCA0LjMtLjggNi45LS44IDIuNiAwIDQuMy4yIDUuNC40IDIuMi41IDMuOCAxLjIgNS4yIDIuMS42LjMgMS4yLjcgMS43IDEuMSAyLjcgMS43IDQuNiAzLjkgNi4zIDYuNC4zLjQuNy45IDEgMS4zIDIuMiAzLjMgMy44IDcuMyA0LjggMTEuOC4yLjkgLjMgMS44LjQgMi43LjMgMS43LjQgMy4zLjUgNC42LjEuNi4yIDEuMS4yIDEuNi4xLjEuMi4zLjMuNC41LjggMS4xIDEuNSA1LjYgMy42IDMuOCAyLjYgOC4xIDUuMyAxMi41IDcuOC43LjQgMS40LjggMiAxLjEuOC40IDEuNi43IDIuNSAxLjEgMy43IDEuMyA1LjYgMiA1LjkgMi4xIDAgMC0uMS0uMS0uNC0uMy0yLjgtMi4xLTUuNi00LjMtOC40LTYuOC00LjgtNC41LTkuOC03LjMtMTQuMy04LjktLjctLjMtMS40LS41LTIuMS0uOC0uNy0uMy0xLjQtLjYtMi4xLS44LTEuNC0uNC0yLjctLjgtNC4xLS45bC0zLjMtLjVjLTcuOS0xLjItMTEuMy01LjgtMTIuNS0xNS0uMi0xLjctLjMtMi43LS4zLTMuNy0uMS0uNy0uMS0xLjQtLjItMi4xLTIuMi05LjQtNS41LTE1LjMtMTAuOS0xOC40LS43LS40LTEuNS0uOC0yLjMtMS4zLS41LS4zLTEtLjYtMS42LS45LS4zLS4yLS42LS4zLS44LS41LS43LS40LTEuNS0uOC0yLjItMS4yLTEtLjYtMi4xLTEuMS0zLjItMS42LS42LS4zLTEuMi0uNi0xLjgtLjgtLjQtLjItLjctLjQtMS4xLS41LTEuMy0uNS0yLjYtLjYtMy45LS42LTIuMiAwLTMuOC4zLTUuMSA4LjEtNC40IDE1LjEtOC44IDI3LjgtMTMgNDAuNXptMTQuNy01LjhjLTEuNy0yLjctMi4yLTYuMi0yLjItMTEgMC00LjYgLjUtNy43IDItMTAuNS42LS45IDEuNS0yLjYgMi42LTIuOS40LS4xLjgtLjEgMS4yLS4xIDIuNCAwIDQuMi45IDUuNyAzLjMgMS4yIDIuMiAyLjQgNS4xIDIuNCAxMC42IDAgNS41LTEuMyA5LjQtMi40IDExLjYtMS41IDIuNi0yLjUgNC44LTMuOCA2LjYtLjcuOS0xLjcgMS42LTIuOSAyLjUtMS43IDEuMy0zLjUgMi01LjQgM2wyMy40IDkwLjJjLTMuOC42LTYuNi0uNC04LjEtMS4zLS42LS4zLTEuMy0uNy0yLTEuMy0xLjktMS4yLTIuOC0yLjYtMy42LTQuMS0uNS0uOC0uOC0xLjctMS0yLjctLjMtMS40LS4zLTMtLjMtNC45IDAtMS45LjEtMy42LjMtNS4yLjItMS4zLjUtMi41LjgtMy44LjEtLjYuMi0xLjIuMy0xLjggMi4zLTYgNi0xMS43IDExLjktMTcuNSAyLjktMi44IDYuMy01LjMgMTAuMS03LjEgNC44LTIuMiA5LjgtMy40IDE0LjktMy43LS4xLTIuMy0uNy01LjUtMi4yLTguMS0xLjItMi4yLTIuOC00LjUtNS4xLTYuNy0yLjYtMi41LTVuNC0zLjUtOC42LTMuNS0zLjIgMC01LjkgMS41LTguMyA0LjEtLjcuNy0xLjMgMS42LTEuOSAyLjQtLjIuMy0uNS43LS43IDEtLjcgMS4yLTEuNCAyLjMtMi4xIDMuNi0uMS4xLS4yLjItLjMgLjQtLjguOS0xLjYgMS43LTMgMi43LTEuNyAxLjMtMy4zIDItNS4xIDJoLS42Yy0xLjIgMC0yLjEtLjItMi44LS41LS45LS41LTEuNS0xLjMtMS45LTIuMy0uNS0xLjEtLjgtMi41LS44LTMuOWMwLTQuMiAxLjgtOC4zIDUuMS0xMS43bDEuNi0xLjYtMS41LTEuNmMtNC41IDQtOC4yIDkuOC0xMC41IDE2LjktMS44IDUuMy0xLjggMTAuNS0uMSAxNS41em0xLjQtMi41Yy0xLjMtLjQtMi4xLS43LTItLjkuMS0uMSAxLjEtLjEgMS45IDAuNi41LjQgMS4yLjcgMiAuOWMuOC4yIDEuOC4zIDIuOC40IDEuMS4xIDMuNi4yIDUuOC0uNCA0LjEtMS4yIDcuNS01LjcgOC43LTkuNiAxLjMtLjIgMi41LS41IDMuNS0xLjIgMS41LTEuMSAyLjQtMi41IDIuNy00LjFsMS42LTMuMiAxLjMtMy4xIDItNC4yLS45LjktMi41IDIuNC0yLjkgMi44LTIuOSA1LjYtMi44IDUuMy0zLjkgMy41em0tMTEuNyA3LjdjLTQuOS0xLjctNy43LTQuMi04LjgtNi40LS41LTEuMS0uNy0yLjQtLjgtMy44LS4xLTEuNC0uMS0yLjYgMC0zLjkgMC0uNC4xLS43LjEtMS4xLS4zLjItLjYuNC0uOS43LS45LjgtMS44IDEuNy0yLjggMi43LTEuNCAxLjMtMi41IDIuNS0zLjcgMy42LTIgMS44LTMuNCAzLjgtNC41IDUuNi0uNC41LS43LjgtMS4xIDEuMy0uMy41LS41IDEuMS0uNiAxLjgtLjIgMS4zLS4zIDIuNy0uMyA0LjEgMCAxLjMuMSAyLjUuMyAzLjYuMS45LjMgMS43LjUgMi40LjIuNy40IDEuNC42IDIuMS42IDEuNSAxLjcgMi41IDMuMyAzLjQgMS4xLjcgMi40IDEgMy44IDEuMSA3LjUtMS43IDEzLjktNS41IDE5LjItMTAuNWwxLjItMS43LTIuMy0yLjFjLTkuMS04LjUtMTYuMy0xNy41LTE5LjctMjMuMi0xLjMtMi4xLTEuOS00LjQtMi02LjgtLjEtMi42LjctNC44IDEuOS02LjcgMi4yLTQuNCA2LjEtNy45IDEwLjUtOS44IDIuMS0uOCAzLjktMS4yIDUuNy0xLjIgMS43IDAgMy4zLjMgNC45LjggMy4zIDEuMyA2LjEgMy4zIDguMyA1LjggMS45IDIuMiAzLjMgNC43IDQuMiA3LjguMyAxLjEuNSAyLjEuNiAzLjIuMiAxLjQuMiAyLjYuMyAzLjguMyAxLjMuNSAyLjYuNiAzLjkuMi45LjQgMS44LjYgMi43LjIgMSAuNSAxLjkuNyAyLjcgMS40IDYuMSAxLjkgMTAuMyAyLjMgMTMuNy4yIDEuNC40IDIuOC41IDQuMS4yIDEuNC4zIDIuOC4zIDQuMWgtLjRjLS41-LjctLjgtMS40LTEuMS0yLjEtLjYtMS4zLTEuMy0yLjgtMi4xLTQuMi0uNS0uOS0uOS0xLjctMS4zLTIuNS01LjQtMTAuNS0xMS40LTE4LjMtMTcuOS0yMi4xLTIuMy0xLjMtNC44LTIuNC03LjctMy40LTEuMS0uNC0yLjMtLjctMy41LS45LTEuMi0uMi0yLjUtLjMtMy45LS4zLTEuNSAwLTMuMi4xLTUuMS42LTMuMi44LTUuNyAyLjItNy40IDQuNC0uNy44LTEuMyAxLjYtMS44IDIuNS0uOCAxLjQtMS4zIDMuMS0xLjYgNS0uNCAyLjItLjUgNC42LS40IDcuM3oiLz48L3N2Zz4=" alt="NIC Logo"></a>
+        </div>
+        <p id="lastUpdated" style="margin-top: 10px;">Page last updated on: </p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
